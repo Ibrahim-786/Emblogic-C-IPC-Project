@@ -1,0 +1,47 @@
+head	1.1;
+access;
+symbols;
+locks
+	vishal:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	2015.03.18.06.06.36;	author vishal;	state Exp;
+branches;
+next	;
+
+
+desc
+@Accepting the data from the server.
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@#include"header.h"
+
+int main(int argc, char *argv[])
+{
+	int rfd, wfd, count, count1, sub;
+	struct add ad;
+	if(argc != 3)
+	{
+		perror("execl");
+		goto OUT;
+	}
+	rfd = atoi(argv[1]);
+	wfd = atoi(argv[2]);
+	count = read(rfd, &ad, sizeof(struct add));
+	printf("In %s  number of bytes read %d\n", __FILE__, count);
+	sub = ad.oprn1 - ad.oprn2;
+//	count1 = write(wfd, &sub, 1);
+//	printf("In %s  number of bytes read %d\n", __FILE__, count1);
+	return 0;
+OUT:
+	return -1;
+}
+@

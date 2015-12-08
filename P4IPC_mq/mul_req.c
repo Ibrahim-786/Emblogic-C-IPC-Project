@@ -1,0 +1,42 @@
+#include"header.h"
+int main(int argc, char *argv[])
+{
+	int sum, msg_id, msg_id3;
+	int rfd,  wfd, count;
+	printf("%s\n",__FILE__);
+	//	struct client ad;
+	struct my_mess op;
+	struct my_mess1 dat;
+	op.oper = '*';
+	op.opr1 = 3;
+	op.opr2 = 4;
+	msg_id = msgget(999, 0666|IPC_CREAT);
+	if(msg_id == -1)
+	{
+		perror("msgget");
+		exit(EXIT_FAILURE);
+	}
+	op.type = 3;
+	if(msgsnd(msg_id, &op, sizeof(struct my_mess), 0) == -1)
+	{
+		perror("msgsnd");	
+		exit(EXIT_FAILURE);
+	}
+	msg_id3 = msgget(996, 0666|IPC_CREAT);
+        if(msg_id3 == -1)
+        {
+                perror("msgget");
+                exit(EXIT_FAILURE);
+        }
+
+	if(msgrcv(msg_id3, &dat, sizeof(struct my_mess1), 58, 0)== -1)
+	{
+		perror("msgrcv");
+		exit(EXIT_FAILURE);
+	}
+	printf("%d::::::::::::::::12\n",dat.res);
+
+	return 0;
+OUT:
+	return 1;
+}

@@ -1,0 +1,56 @@
+head	1.2;
+access;
+symbols;
+locks
+	vishal:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2015.03.04.19.50.31;	author vishal;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.02.21.56.27;	author vishal;	state Exp;
+branches;
+next	;
+
+
+desc
+@include the stdio.h, stdlib.h.
+Define the structure for the add_cl.
+Wrote the prototype for the for invoke_client,invoke_clpross.
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<signal.h>
+struct add
+{
+        char oper;
+        int oprn1, oprn2;
+};
+int invoke_clpross(struct add, int *);
+int invoke_cl(int *);
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d4 1
+a4 2
+
+int invoke_cl(int *);
+d10 2
+@

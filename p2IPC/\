@@ -1,0 +1,38 @@
+#include"header.h"
+//int sum;
+/*void ouch(int sig)
+{
+	//(void)	signal(SIGINT, SIG_DFL);	
+}*/
+int main(int argc, char *argv[])
+{
+	int sum,ret;
+	int rfd,  wfd, count;
+	if(argc != 3)
+	{
+		perror("execl");
+		goto OUT;
+	}
+	printf("%s\n",__FILE__);
+	struct add ad;
+	ad.oper = '+';
+	ad.oprn1 = 14;
+	ad.oprn2 = 25;
+	rfd = atoi(argv[1]);
+	wfd = atoi(argv[2]);
+	count = write(wfd, &ad, sizeof(struct add));
+	 printf("The number of character write in %s is :- %d\n",__FILE__, count);
+	//(void)signal(SIGINT,ouch);
+	/*while(1)
+	{
+		
+	}*/
+	/*printf("Before pause\n");
+	pause();
+	read(rfd, &sum, sizeof(int));
+	printf("%d              :-\n",rfd);
+	printf("%s                                Number read is :- %d\n", __FILE__, sum);*/
+	return 0;
+OUT:
+	return 1;
+}

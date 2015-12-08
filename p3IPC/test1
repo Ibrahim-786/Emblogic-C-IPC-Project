@@ -1,0 +1,18 @@
+#! /bin/bash
+
+make fifo2
+make fifo3
+make fifo4
+make fifo_pro2
+make fifo_pro3
+make fifo_pro4
+
+./fifo2 &
+
+./fifo3 &
+
+./fifo4 &
+
+./fifo_pro2 &
+./fifo_pro3 &
+./fifo_pro4 &

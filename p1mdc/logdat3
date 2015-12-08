@@ -1,0 +1,25 @@
+
+RCS file: header.h,v
+Working file: header.h
+head: 1.2
+branch:
+locks: strict
+	vishal: 1.2
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+Update the rcs file
+----------------------------
+revision 1.2	locked by: vishal;
+date: 2015/02/06 15:36:09;  author: vishal;  state: Exp;  lines: +3 -0
+include the string function
+also define the function to open the file
+gave the function to calculate the length of data compress
+design function to calculate number of bit compress
+----------------------------
+revision 1.1
+date: 2015/02/04 18:20:21;  author: vishal;  state: Exp;
+Initial revision
+=============================================================================

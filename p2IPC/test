@@ -1,0 +1,57 @@
+ci server.c
+ci add_req.c
+ci sub_req.c
+ci mul_req.c
+ci add_pro.c
+ci sub_pro.c
+ci mul_pro.c
+
+co server.c
+co add_req.c
+co sub_req.c
+co mul_req.c
+co add_pro.c
+co sub_pro.c
+co mul_pro.c
+
+
+gcc -o add_req add_req.c
+read
+
+gcc -o sub_req sub_req.c
+read
+
+gcc -o mul_req mul_req.c
+read
+
+gcc -o add_req add_pro.c
+read
+
+gcc -o sub_req sub_pro.c
+read
+
+gcc -o mul_req mul_pro.c
+read
+
+
+gcc -o server server.c
+read
+
+./server
+read
+
+rm server.c
+rm add_req.c
+rm sub_req.c
+rm mul_req.c
+rm add_pro.c
+rm sub_pro.c
+rm mul_pro.c
+
+co -l server.c
+co -l add_req.c
+co -l sub_req.c
+co -l mul_req.c
+co -l add_pro.c
+co -l sub_pro.c
+co -l mul_pro.c

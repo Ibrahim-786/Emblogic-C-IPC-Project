@@ -1,0 +1,31 @@
+#! /bin/bash
+ci header.h
+ci server.c
+ci add_cl.c
+ci add_pro.c
+
+co header.h
+co server.c
+co add_cl.c
+co add_pro.c
+
+gcc -o add_cl add_cl.c
+read
+gcc -o add_pro add_pro.c
+read
+gcc -o server server.c
+read 
+
+./add_pro
+./add_cl
+
+./server
+read
+
+rm server.c
+rm add_cl.c
+
+co -l header.h
+co -l server.c
+co -l add_cl.c
+co -l add_pro.c

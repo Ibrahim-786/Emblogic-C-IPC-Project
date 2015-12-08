@@ -1,0 +1,47 @@
+#! /bin/bash
+
+ci server.c
+ci add_req.c
+ci add_pro.c
+ci sub_req.c
+ci sub_pro.c
+ci mul_req.c
+ci mul_pro.c
+
+co server.c
+co add_req.c
+co add_pro.c
+co sub_req.c
+co sub_pro.c
+co mul_req.c
+co mul_pro.c
+
+make server
+
+make add_req &
+
+make sub_req &
+
+make mul_req &
+
+make add_pro &
+
+make sub_pro &
+
+make mul_pro
+
+
+./add_req &
+
+./sub_req &
+
+./mul_req &
+
+./server
+
+./add_pro &
+
+./sub_pro &
+
+./mul_pro
+

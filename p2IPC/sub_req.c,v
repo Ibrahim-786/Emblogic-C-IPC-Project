@@ -1,0 +1,134 @@
+head	1.4;
+access;
+symbols;
+locks
+	vishal:1.4; strict;
+comment	@ * @;
+
+
+1.4
+date	2015.03.18.12.32.54;	author vishal;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2015.03.18.06.06.34;	author vishal;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2015.03.06.05.24.08;	author vishal;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.05.20.00.24;	author vishal;	state Exp;
+branches;
+next	;
+
+
+desc
+@Acceptind the file descriptor from the server.
+@
+
+
+1.4
+log
+@*** empty log message ***
+@
+text
+@#include"header.h"
+//int sum;
+/*void ouch(int sig)
+{
+	(void)	signal(SIGINT, SIG_DFL);	
+}*/
+int main(int argc, char *argv[])
+{
+	int sub,ret;
+	int rfd,  wfd, count;
+	if(argc != 3)
+	{
+		perror("execl");
+		goto OUT;
+	}
+	printf("%s\n",__FILE__);
+	struct add ad2;
+	ad2.oper = '-';
+	ad2.oprn1 = 33;
+	ad2.oprn2 = 43;
+	rfd = atoi(argv[1]);
+	wfd = atoi(argv[2]);
+	count = write(wfd, &ad2, sizeof(struct add));
+	printf("Number of character write in %s is %d\n", __FILE__, count);
+	 //(void)signal(SIGINT,ouch);
+        /*while(1)
+ *         {
+ *                         
+ *                                 }*/
+        /*printf("Before pause\n");
+        pause();
+        read(rfd, &sub, sizeof(int));
+        printf("%d              :-\n",rfd);
+        printf("%s                                Number read is :- %d\n", __FILE__, sub);
+*/
+	return 0;
+OUT:
+	 return 1;
+}
+@
+
+
+1.3
+log
+@*** empty log message ***
+@
+text
+@d25 1
+a25 1
+	 (void)signal(SIGINT,ouch);
+d38 1
+a38 1
+	return 1;
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@d9 1
+a9 1
+	int sum,ret;
+d24 12
+a35 11
+	printf("The number of character write in %s is :- %d\n",__FILE__, count);
+	/*(void)signal(SIGINT,ouch);
+	while(1)
+	{
+		
+		//read(rfd, &sum, 1);
+		//printf("Number read is :- %d\n",sum);
+	}
+	sleep(1);
+	//read(rfd, &sum, 1);
+	//printf("Number read is :- %d\n",sum);*/
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d17 4
+a20 4
+	struct add ad;
+	ad.oper = '-';
+	ad.oprn1 = 33;
+	ad.oprn2 = 43;
+d23 1
+a23 1
+	count = write(wfd, &ad, sizeof(struct add));
+@

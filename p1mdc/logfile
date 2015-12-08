@@ -1,0 +1,38 @@
+
+RCS file: header.h,v
+Working file: header.h
+head: 1.1
+branch:
+locks: strict
+	vishal: 1.1
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+Update the rcs file
+----------------------------
+revision 1.1	locked by: vishal;
+date: 2015/02/04 18:20:21;  author: vishal;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: mdc.c,v
+Working file: mdc.c
+head: 1.1
+branch:
+locks: strict
+	vishal: 1.1
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+open the present file
+And read the number of character in the file
+This is done by using "header.h"
+----------------------------
+revision 1.1	locked by: vishal;
+date: 2015/02/04 18:15:38;  author: vishal;  state: Exp;
+Initial revision
+=============================================================================

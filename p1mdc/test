@@ -1,0 +1,20 @@
+ci header.h
+ci mdc.c
+
+co header.h
+co mdc.c
+
+gcc -o md  mdc.c
+read
+if (./md textfile)
+	then
+		read
+		rm mdc.c
+		rm header.h 
+		co -l mdc
+		co -l mdc.c
+		co -l header.h
+	else
+		co -l mdc.c
+		co -l header.h
+fi

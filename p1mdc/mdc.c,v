@@ -1,0 +1,772 @@
+head	1.18;
+access;
+symbols;
+locks
+	vishal:1.18; strict;
+comment	@ * @;
+
+
+1.18
+date	2015.02.13.14.58.30;	author vishal;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2015.02.13.13.02.55;	author vishal;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2015.02.06.15.39.55;	author vishal;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2015.02.06.11.07.44;	author vishal;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2015.02.06.11.01.32;	author vishal;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2015.02.06.10.54.12;	author vishal;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2015.02.06.10.43.55;	author vishal;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2015.02.05.14.52.19;	author vishal;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2015.02.05.14.51.17;	author vishal;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2015.02.05.14.43.55;	author vishal;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2015.02.05.14.24.33;	author vishal;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2015.02.05.12.16.36;	author vishal;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2015.02.05.10.47.49;	author vishal;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2015.02.05.09.16.29;	author vishal;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2015.02.05.09.14.35;	author vishal;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2015.02.05.09.05.38;	author vishal;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2015.02.05.08.02.53;	author vishal;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.02.04.18.15.38;	author vishal;	state Exp;
+branches;
+next	;
+
+
+desc
+@open the present file
+And read the number of character in the file
+This is done by using "header.h"
+@
+
+
+1.18
+log
+@during compress using sprintf in stead of giving it to so other character variable
+@
+text
+@#include"header.h"
+int main(int argc, char *argv[])
+{
+	int fd, ndc, flag, i, ndc_temp, cl, fdc;
+	char ch, *ma;
+	if(argc != 2)
+	{
+		printf("Insufficient argument \n");
+		goto out;
+	}
+	fd = opfd(argv[1]);
+	ma = masterar(fd);	
+	
+	printf("File %s open successfulelly at fd :- \n",argv[1]);	
+	
+	printf("The string compress is :-%s\n",ma);
+	
+/*	while( (ndc_temp) > 1)
+	{
+		ndc_temp = ndc_temp / 2;
+		k++;
+	}*/
+	ndc = strlen(ma);
+	cl = bitlen(ndc);
+	
+	fdc = compression(fd, ma, cl);
+//	decompress(fdc, ma);
+	
+	close(fd);
+	exit(EXIT_SUCCESS);
+	return 0;
+	out:
+	exit(EXIT_FAILURE);
+}
+
+int opfd(char *a)
+{
+	int fd;
+	fd = open(a,O_RDONLY);
+	if(fd < 0)
+	{
+		printf("In the fd loop %d\n",fd);
+		exit(EXIT_FAILURE);
+	}
+	printf("The value read from the textfile %d\n",fd);
+	return fd;
+}
+char *masterar(int fd)
+{
+	
+	char *ma, ch;
+	int flag, i, ndc;
+	ndc = 0;
+	ma = (char*)malloc(sizeof(char));
+	while(read(fd,&ch,1) && ch != 10)
+	{
+		flag = 1;	
+		if(ndc > 0)		
+		{
+			ma = (char *)realloc(ma, ndc + 1);	
+			if(ma == NULL)
+
+			{
+				perror("realloc");
+				return NULL;
+			}	
+		
+			for(i = 0; i < ndc; i++)
+			{
+				if(ch == *(ma + i))
+				{
+					flag = 0;
+					break;
+				}
+			}
+		}
+		if(flag )
+		{
+			*(ma + ndc) = ch;
+			ndc++;
+			printf("%d\n",ch);
+		}
+		
+	}
+		printf("The number of data bit data compress:- %d\n",ndc);
+		return ma;
+} 
+int compression(int fd, char *ma, int ndc)
+{
+	int fdc;
+	switch(ndc)
+	{
+		case 4:
+		{
+			printf("Before compress\n");
+			fdc = compress(fd,  ma);
+			printf("After compress\n");
+		}
+	}
+	return fdc;	
+}
+
+int compress(int fd, char *ma)
+{
+	int  i, byt, cfd;
+	char ch, a;
+	i = byt = 0;
+	cfd = open("codekey",O_RDWR|O_CREAT,777);
+	lseek(fd, 0,SEEK_SET); 
+	while(read(fd,&ch,1)&& ch != 10)
+	{
+		byt = byt ^ byt;
+		i = 0;
+		while(*(ma+i) != '\0')
+		{
+			if(ch == *(ma + i))
+			{
+				break;
+			}
+			i++;
+		}
+		//a = i;
+		sprintf(&a,"%d",i);
+		a = a<<4;
+		byt = byt | a;
+		i = 0;
+		read(fd,&ch,1);
+		while(*(ma+i) != '\0')
+		{
+			if(ch == *(ma + i))
+			{
+				break;
+			}
+			i++;
+		}
+		//a = i;
+		sprintf(&a,"%d",i);
+		a = a<<4;
+		a = a>>4;
+		byt = byt | a;
+		write(cfd,&byt,1);
+	}
+	byt = '\0';
+	write(cfd,&byt,1);
+
+	return cfd;
+	
+}	
+
+int bitlen(int ndc)
+{
+	int k;
+	if(ndc > 127)
+		k = 8;
+	else if(ndc > 63)
+		k = 7;
+	else if(ndc > 31)
+		k = 6;
+	else if(ndc > 15)
+		k = 5;
+	else if(ndc > 7)
+		k = 4;
+	else if(ndc > 3)
+		k = 3;
+	else if(ndc > 1)
+		k = 2;
+	else if(ndc > 0)
+		k = 1;
+	printf("Compressed data is %d bit data\n",k );
+	return k;
+}
+
+/*decompress(int fdc, char *ma)
+{
+	int i, i_no;
+	char ch;
+	lseek(fdc, 0, SEEK_END);
+	
+	i = 0;
+	while(read(fdc,&ch,1)&&ch != 10)
+	{
+		ch = ch>>4;
+		while(ma != 0)
+		{
+			if(ch == i)
+			{
+				i_no = i; 
+				break;
+			}
+		}
+	}
+	return 0;
+}*/
+@
+
+
+1.17
+log
+@Create a function to Encrypt the data .
+Call the compress data by passing fd , ma, and number of data compress
+According to compress data it will call another function
+@
+text
+@d4 1
+a4 1
+	int fd, ndc, flag, i, ndc_temp, cl, z;
+d26 2
+a27 2
+	compression(fd, ma, cl);
+	
+d90 1
+d96 1
+a96 1
+			compress(fd,  ma);
+d100 1
+a100 1
+	return 0;	
+d105 2
+a106 2
+	int k, i, byt, cfd;
+	char ch,a;
+a117 1
+				k = i;
+d122 2
+a123 1
+		a = i;
+a131 1
+				k = i;
+d136 2
+a137 1
+		a = i;
+a140 1
+	//	lseek(cfd,0,SEEK_END);
+d143 2
+d146 2
+a147 1
+	return 0;
+d173 21
+@
+
+
+1.16
+log
+@create the body of the function to open the file, to caluclate the number of bit compress
+@
+text
+@d4 1
+a4 1
+	int fd, ndc, flag, i, ndc_temp, k, z;
+d11 6
+a17 43
+	fd = open(argv[1],O_RDONLY);
+	if(fd < 0)
+	{
+		printf("In the fd loop %d",fd);
+		goto out;
+	}
+	printf("File %s open successfulelly at fd :- \n",argv[1]);
+	printf("The value read from the textfile %d\n",fd);
+
+	/*ma = (char*)malloc(sizeof(char));
+	while(read(fd,&ch,1) && ch != 10)
+	{
+		flag = 1;	
+		if(ndc > 0)		
+		{
+			ma = (char *)realloc(ma, ndc);	
+			if(ma == NULL)
+			{
+				perror("realloc");
+				goto out;
+			}	
+		
+			for(i = 0; i < ndc; i++)
+			{
+				if(ch == *(ma + i))
+				{
+					flag = 0;
+					break;
+				}
+			}
+		}
+		if(flag )
+		{
+			*(ma + ndc) = ch;
+			ndc++;
+			printf("%d\n",ch);
+		}
+		
+	}*/
+	ndc = masterar(fd);
+//	printf("The string is :-  %s\n",ma);
+	printf("The number of character after comparission:-%d\n",ndc);
+	ndc_temp = ndc;
+d23 4
+a26 19
+	bitlen(ndc);
+	/*if(ndc > 127)
+		k = 8;
+	else if(ndc > 63)
+		k = 7;
+	else if(ndc > 31)
+		k = 6;
+	else if(ndc > 15)
+		k = 5;
+	else if(ndc > 7)
+		k = 4;
+	else if(ndc > 3)
+		k = 3;
+	else if(ndc > 1)
+		k = 2;
+	else if(ndc > 0)
+		k = i;
+	printf("Compressed data is %d bit data",k );
+	*/
+d35 2
+a36 1
+/*int openfd(char a)
+d42 1
+a42 1
+		printf("In the fd loop %d",fd);
+d45 1
+a46 21
+}*/
+int bitlen(int ndc)
+{
+	int k;
+	if(ndc > 127)
+		k = 8;
+	else if(ndc > 63)
+		k = 7;
+	else if(ndc > 31)
+		k = 6;
+	else if(ndc > 15)
+		k = 5;
+	else if(ndc > 7)
+		k = 4;
+	else if(ndc > 3)
+		k = 3;
+	else if(ndc > 1)
+		k = 2;
+	else if(ndc > 0)
+		k = 1;
+	printf("Compressed data is %d bit data",k );
+d48 1
+a48 1
+int masterar(int fd)
+d60 1
+a60 1
+			ma = (char *)realloc(ma, ndc);	
+d62 1
+d65 1
+a65 1
+				return -1;
+d85 2
+a86 2
+		printf("The string is :-  %s\n",ma);
+		return ndc;
+d88 82
+@
+
+
+1.15
+log
+@*** empty log message ***
+@
+text
+@d12 1
+a12 3
+	ndc = 0;
+	fd = openfd(argv[1]);
+	/*fd = open(argv[1],O_RDONLY);
+d17 1
+a17 1
+	}*/
+d21 1
+a21 1
+	ma = (char*)malloc(sizeof(char));
+a23 1
+	
+d50 3
+a52 3
+	}
+
+	printf("The string is :-  %s\n",ma);
+d87 1
+a87 1
+int openfd(char a)
+d97 1
+a97 1
+}
+d119 39
+@
+
+
+1.14
+log
+@*** empty log message ***
+@
+text
+@d90 1
+a90 1
+int openfd(char argv[1])
+d93 1
+a93 1
+	fd = open(argv[1],O_RDONLY);
+@
+
+
+1.13
+log
+@*** empty log message ***
+@
+text
+@d13 2
+a14 1
+	fd = open(argv[1],O_RDONLY);
+d19 1
+a19 1
+	}
+d89 11
+@
+
+
+1.12
+log
+@comparess the two file simuntenouly
+@
+text
+@d6 1
+a6 1
+	if(argc != 3)
+d11 1
+a11 2
+	for(z = 1; z < 3; z++)
+	{
+d13 1
+a13 1
+	fd = open(argv[z],O_RDONLY);
+d62 2
+a63 1
+	if(ndc > 127)
+d80 1
+a81 1
+	printf("\n\n\n");
+a82 1
+	}
+d88 21
+@
+
+
+1.11
+log
+@correction of semicolon
+@
+text
+@d4 1
+a4 1
+	int fd, ndc, flag, i, ndc_temp, k;
+d6 1
+a6 1
+	if(argc != 2)
+d11 2
+d14 1
+a14 2
+
+	fd = open(argv[1],O_RDONLY);
+d24 1
+a24 1
+	while(read(fd,&ch,1) && ch != 0)
+d80 4
+@
+
+
+1.10
+log
+@Find the number of bits data compressed by using if else ladder instead of while loop
+@
+text
+@d77 1
+a77 1
+		k = i
+@
+
+
+1.9
+log
+@Find the number of bits data compressed
+this is find by using for loop
+@
+text
+@d57 1
+a57 1
+	while( (ndc_temp) > 1)
+d61 18
+a78 2
+	}
+	printf("Compressed data is %d bit data",k + 1);
+@
+
+
+1.8
+log
+@*** empty log message ***
+@
+text
+@d62 1
+a62 1
+	printf("oye ane he hage  hai yr %d",k + 1);
+@
+
+
+1.7
+log
+@Compress the data by using for loop
+print the number of character after comprassion
+@
+text
+@d4 1
+a4 1
+	int fd, ndc, flag, i;
+d23 1
+a23 1
+	while(read(fd,&ch,1) && ch !=0)
+d26 1
+a26 1
+		flag=0;	
+d36 1
+a36 3
+		for(i = 0; i < ndc; i++)
+		{
+			if(ch == *(ma + i))
+d38 5
+a42 2
+				flag = 1;
+				break;
+d45 1
+a45 2
+		}
+		if(flag == 0)
+d49 1
+d53 2
+a54 1
+	printf("The string is %s\n",ma);
+d56 7
+@
+
+
+1.6
+log
+@correct of argv in ""
+print the array save in the pointer
+@
+text
+@d4 1
+a4 1
+	int fd, ndc;
+a24 1
+	//	printf("ch = %c",ch);
+d26 1
+a26 1
+	//	printf("ndc %d",ndc);
+d34 8
+d44 6
+a49 2
+		*(ma + ndc) = ch;
+		ndc++;
+d53 1
+@
+
+
+1.5
+log
+@correction if statement
+@
+text
+@d13 6
+a18 1
+	fd = open("argv[1]",O_RDONLY);
+d20 1
+a20 1
+	printf("The value read from the textfile\n");
+d22 2
+a23 2
+	ma = (char*)malloc(1);
+	while(read(fd,&ch,1) && ch != 10)
+d25 3
+d30 2
+a31 1
+			if(!realloc(ma, ndc + 1))
+d37 1
+a37 1
+		*ma = ch;
+d41 1
+a41 1
+	printf("The string is %s\n",*ma);
+@
+
+
+1.4
+log
+@correction of malloc
+print the copied string
+@
+text
+@d22 1
+a22 1
+			if(realloc(ma, ndc + 1))
+@
+
+
+1.3
+log
+@Store the data in the file in new pointer *ma
+By using realloc
+@
+text
+@d17 1
+a17 1
+	ma = malloc(1);
+d32 1
+@
+
+
+1.2
+log
+@This just the updatation of rcs file
+@
+text
+@d4 2
+a5 2
+	int fd;
+	char ch;
+d11 3
+a13 1
+	fd = open("textfile",O_RDONLY);
+d16 2
+d20 10
+a30 1
+		printf("ch = %c\n",ch);
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d6 1
+a6 1
+	if(argc != 1)
+d9 1
+a9 1
+	goto out;
+d12 1
+a12 1
+	printf("File open successfulelly at fd :- %d\n",fd);
+d21 1
+a23 1
+	return 0;
+@

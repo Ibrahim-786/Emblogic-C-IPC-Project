@@ -1,0 +1,83 @@
+head	1.2;
+access;
+symbols;
+locks
+	vishal:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2015.03.18.12.32.55;	author vishal;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.03.18.06.06.36;	author vishal;	state Exp;
+branches;
+next	;
+
+
+desc
+@Inter Process Communication.
+There is three client requsting to the server.
+Server accept the requst and send the data to the processing unit.
+Processing unit perform the opertion on the data and send back to server.
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@#include"header.h"
+/*void ouch(int sig)
+{
+         //(void)  signal(SIGINT, SIG_DFL);        
+}*/
+
+int main(int argc, char *argv[])
+{
+	if(argc != 3)
+	{
+		perror("execl");
+	}
+	int rfd, wfd, count,count1, sum;
+	struct add ad;
+	if(argc != 3)
+	{
+		perror("execl");
+		goto OUT;
+	}
+	rfd = atoi(argv[1]);							
+	wfd = atoi(argv[2]);
+	count = read(rfd, &ad, sizeof(struct add));
+	printf("In %s  number of bytes read %d\n", __FILE__, count);
+	sum = ad.oprn1 + ad.oprn2;
+	count1 = write(wfd, &sum, sizeof(int));
+	printf("In %s  number of bytes write %d\n", __FILE__, count1);
+	return 0;
+OUT:
+	return -1;
+}
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@a14 3
+	pid_t pid;
+	pid = getpid();
+	printf("%dprocessing client\n",pid);
+a24 3
+	printf("summmmmmmmmmmmmmmmm %d\n", sum);
+	printf("Bye............\n");
+	//ff = 1;
+a26 3
+	signal(SIGINT,ouch);
+	//while(1);
+	pause();
+@
